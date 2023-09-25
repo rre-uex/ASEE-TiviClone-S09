@@ -1,4 +1,4 @@
-package es.unex.giiis.asee.tiviclones02
+package es.unex.giiis.asee.tiviclone
 
 import org.junit.Test
 

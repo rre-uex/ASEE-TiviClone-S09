@@ -1,4 +1,4 @@
-package es.unex.giiis.asee.tiviclones02
+package es.unex.giiis.asee.tiviclone
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

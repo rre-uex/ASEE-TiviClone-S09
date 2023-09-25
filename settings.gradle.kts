@@ -13,6 +13,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Tivi Clone S02"
+rootProject.name = "Tivi Clone"
 include(":app")
  

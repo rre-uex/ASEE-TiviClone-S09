@@ -1,4 +1,4 @@
-package es.unex.giiis.asee.tiviclones02.model
+package es.unex.giiis.asee.tiviclone.model
 
 import java.io.Serializable
 

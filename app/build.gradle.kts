@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "es.unex.giiis.asee.tiviclones02"
+    namespace = "es.unex.giiis.asee.tiviclone"
     compileSdk = 33
 
     defaultConfig {
-        applicationId = "es.unex.giiis.asee.tiviclones02"
+        applicationId = "es.unex.giiis.asee.tiviclone"
         minSdk = 24
         targetSdk = 33
         versionCode = 1

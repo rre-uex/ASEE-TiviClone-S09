@@ -1,4 +1,4 @@
-package es.unex.giiis.asee.tiviclones02.utils
+package es.unex.giiis.asee.tiviclone.utils
 
 class CredentialCheck private constructor() {
 

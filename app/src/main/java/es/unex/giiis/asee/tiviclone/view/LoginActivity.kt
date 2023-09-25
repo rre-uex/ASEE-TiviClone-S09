@@ -1,4 +1,4 @@
-package es.unex.giiis.asee.tiviclones02.view
+package es.unex.giiis.asee.tiviclone.view
 
 import android.content.Intent
 import android.net.Uri
@@ -7,9 +7,10 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 
-import es.unex.giiis.asee.tiviclones02.databinding.ActivityLoginBinding
-import es.unex.giiis.asee.tiviclones02.model.User
-import es.unex.giiis.asee.tiviclones02.utils.CredentialCheck
+import es.unex.giiis.asee.tiviclone.databinding.ActivityLoginBinding
+import es.unex.giiis.asee.tiviclone.model.User
+import es.unex.giiis.asee.tiviclone.utils.CredentialCheck
+import es.unex.giiis.asee.tiviclone.view.home.HomeActivity
 
 class LoginActivity : AppCompatActivity() {
 

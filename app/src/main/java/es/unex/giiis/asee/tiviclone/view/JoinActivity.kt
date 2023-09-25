@@ -1,4 +1,4 @@
-package es.unex.giiis.asee.tiviclones02.view
+package es.unex.giiis.asee.tiviclone.view
 
 import android.content.Context
 import android.content.Intent
@@ -7,9 +7,9 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.appcompat.app.AppCompatActivity
 
-import es.unex.giiis.asee.tiviclones02.databinding.ActivityJoinBinding
-import es.unex.giiis.asee.tiviclones02.model.User
-import es.unex.giiis.asee.tiviclones02.utils.CredentialCheck
+import es.unex.giiis.asee.tiviclone.databinding.ActivityJoinBinding
+import es.unex.giiis.asee.tiviclone.model.User
+import es.unex.giiis.asee.tiviclone.utils.CredentialCheck
 
 class JoinActivity : AppCompatActivity() {
 

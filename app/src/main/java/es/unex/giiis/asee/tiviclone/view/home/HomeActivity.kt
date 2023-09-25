@@ -1,16 +1,21 @@
-package es.unex.giiis.asee.tiviclones02.view
+package es.unex.giiis.asee.tiviclone.view.home
 
 import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 
-import es.unex.giiis.asee.tiviclones02.R
-import es.unex.giiis.asee.tiviclones02.databinding.ActivityHomeBinding
-import es.unex.giiis.asee.tiviclones02.model.User
+import es.unex.giiis.asee.tiviclone.R
+import es.unex.giiis.asee.tiviclone.databinding.ActivityHomeBinding
+import es.unex.giiis.asee.tiviclone.model.User
 
 class HomeActivity : AppCompatActivity() {
     private lateinit var binding: ActivityHomeBinding
+
+    private lateinit var discoverFragment: DiscoverFragment
+    private lateinit var libraryFragment: LibraryFragment
+    private lateinit var userFragment: UserFragment
 
     companion object {
         const val USER_INFO = "USER_INFO"
@@ -38,12 +43,19 @@ class HomeActivity : AppCompatActivity() {
     }
 
     fun setUpUI(user: User) {
-        with(binding) {
-            tvGreeting.text = getString(R.string.greeting, user.name)
-        }
+        discoverFragment = DiscoverFragment()
+        libraryFragment = LibraryFragment()
+        userFragment = UserFragment()
+
+        //TODO set discoverFragment as default fragment
+
     }
 
     fun setUpListeners() {
-        //nothing to do
+        //TODO set listeners for bottom navigation bar
     }
+
+    private fun setCurrentFragment(fragment: Fragment): Nothing = TODO()
+
+
 }

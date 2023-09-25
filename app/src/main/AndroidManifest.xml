@@ -10,10 +10,10 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.TiviCloneS02"
+        android:theme="@style/Theme.TiviClone"
         tools:targetApi="31">
         <activity
-            android:name=".view.HomeActivity"
+            android:name=".view.home.HomeActivity"
             android:exported="false" />
         <activity
             android:name=".view.JoinActivity"
