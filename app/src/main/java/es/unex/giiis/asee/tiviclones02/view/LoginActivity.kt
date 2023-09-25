@@ -1,5 +1,7 @@
 package es.unex.giiis.asee.tiviclones02.view
 
+import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -16,14 +18,21 @@ class LoginActivity : AppCompatActivity() {
     private val responseLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == RESULT_OK) {
-               //TODO get data from result and update IU
-                val name = ""
-                val password = ""
-                Toast.makeText(
-                    this@LoginActivity,
-                    "New user ($name/$password) created",
-                    Toast.LENGTH_SHORT
-                ).show()
+                with(result.data) {
+                    val name = this?.getStringExtra(JoinActivity.USERNAME).orEmpty()
+                    val password = this?.getStringExtra(JoinActivity.PASS).orEmpty()
+
+                    with(binding) {
+                        etPassword.setText(password)
+                        etUsername.setText(name)
+                    }
+
+                    Toast.makeText(
+                        this@LoginActivity,
+                        "New user ($name/$password) created",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
         }
 
@@ -65,15 +74,16 @@ class LoginActivity : AppCompatActivity() {
 
     private fun navigateToHomeActivity(user: User, msg: String) {
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
-        //TODO go to home activity
+        HomeActivity.start(this, user)
     }
 
     private fun navigateToJoin() {
-        //TODO go to join activity
+        JoinActivity.start(this, responseLauncher)
     }
 
     private fun navigateToWebsite() {
-        //TODO go to website "https://trakt.tv/"
+        val webIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://trakt.tv/"))
+        startActivity(webIntent)
     }
 
     private fun notifyInvalidCredentials(msg: String) {
