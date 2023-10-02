@@ -4,7 +4,15 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.view.Menu
+import android.view.MenuItem
+import android.widget.Toast
+import androidx.appcompat.widget.SearchView
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.navigateUp
+import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.setupWithNavController
 
 import es.unex.giiis.asee.tiviclone.R
 import es.unex.giiis.asee.tiviclone.databinding.ActivityHomeBinding
@@ -12,10 +20,11 @@ import es.unex.giiis.asee.tiviclone.model.User
 
 class HomeActivity : AppCompatActivity() {
     private lateinit var binding: ActivityHomeBinding
+    private lateinit var appBarConfiguration: AppBarConfiguration
+    private val navController by lazy {
+        (supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment).navController
+    }
 
-    private lateinit var discoverFragment: DiscoverFragment
-    private lateinit var libraryFragment: LibraryFragment
-    private lateinit var userFragment: UserFragment
 
     companion object {
         const val USER_INFO = "USER_INFO"
@@ -43,19 +52,51 @@ class HomeActivity : AppCompatActivity() {
     }
 
     fun setUpUI(user: User) {
-        discoverFragment = DiscoverFragment()
-        libraryFragment = LibraryFragment()
-        userFragment = UserFragment()
+        binding.bottomNavigation.setupWithNavController(navController)
+            appBarConfiguration = AppBarConfiguration(
+                setOf(
+                    R.id.discoverFragment,
+                    R.id.userFragment,
+                    R.id.libraryFragment
+                )
+            )
+        setSupportActionBar(binding.toolbar)
+        setupActionBarWithNavController(navController, appBarConfiguration)
 
-        //TODO set discoverFragment as default fragment
+    }
 
+    override fun onSupportNavigateUp(): Boolean {
+        return navController.navigateUp(appBarConfiguration)
+                || super.onSupportNavigateUp()
     }
 
     fun setUpListeners() {
-        //TODO set listeners for bottom navigation bar
+        //nothing to do
     }
 
-    private fun setCurrentFragment(fragment: Fragment): Nothing = TODO()
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.toolbar_home, menu)
 
+        val searchItem = menu?.findItem(R.id.action_search)
+        val searchView = searchItem?.actionView as SearchView
+
+        // Configure the search info and add any event listeners.
+
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+        R.id.action_settings -> {
+            // User chooses the "Settings" item. Show the app settings UI.
+            Toast.makeText(this, "Settings option", Toast.LENGTH_SHORT).show()
+            true
+        }
+
+        else -> {
+            // The user's action isn't recognized.
+            // Invoke the superclass to handle it.
+            super.onOptionsItemSelected(item)
+        }
+    }
 
 }

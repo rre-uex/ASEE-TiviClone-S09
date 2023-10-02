@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/bottom_bar_nav_graph"
+    app:startDestination="@id/discoverFragment">
+
+    <fragment
+        android:id="@+id/discoverFragment"
+        android:name="es.unex.giiis.asee.tiviclone.view.home.DiscoverFragment"
+        android:label="@string/discover_option"
+        tools:layout="@layout/fragment_discover" />
+    <fragment
+        android:id="@+id/libraryFragment"
+        android:name="es.unex.giiis.asee.tiviclone.view.home.LibraryFragment"
+        android:label="@string/library_option"
+        tools:layout="@layout/fragment_library" />
+    <fragment
+        android:id="@+id/userFragment"
+        android:name="es.unex.giiis.asee.tiviclone.view.home.UserFragment"
+        android:label="@string/user_option"
+        tools:layout="@layout/fragment_user" />
+</navigation>
