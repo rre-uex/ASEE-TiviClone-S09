@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="@string/login_header">
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="rememberme"
+            android:title="@string/autologin_title" />
+        <EditTextPreference
+            android:defaultValue="Watney"
+            android:key="username"
+            android:selectAllOnFocus="true"
+            android:singleLine="false"
+            android:title="@string/username_title"
+            app:useSimpleSummaryProvider="true" />
+        <EditTextPreference
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="Mamma mia"
+            android:selectAllOnFocus="true"
+            android:singleLine="false"
+            android:title="@string/password_title"
+            app:key="password"
+            app:useSimpleSummaryProvider="true" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="@string/sorting_header">
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="sorting"
+            android:title="@string/sorting_title" />
+
+        <ListPreference
+            app:defaultValue="title"
+            app:entries="@array/criteria_entries"
+            app:entryValues="@array/criteria_values"
+            app:key="criteria"
+            app:title="@string/criteria_title"
+            app:useSimpleSummaryProvider="true" />
+
+    </PreferenceCategory>
+</PreferenceScreen>

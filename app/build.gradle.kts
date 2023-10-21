@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("androidx.navigation.safeargs.kotlin")
 }
 
 android {
@@ -42,6 +43,7 @@ android {
 
 dependencies {
 
+    implementation("androidx.preference:preference:1.2.1")
     // Navigation Component
     val navVersion = "2.5.3"
 
@@ -54,6 +56,9 @@ dependencies {
 
     // Testing Navigation
     androidTestImplementation("androidx.navigation:navigation-testing:$navVersion")
+
+    // Jetpack Preferences
+    implementation("androidx.preference:preference-ktx:1.2.0")
 
     // Jetpack Compose Integration
     implementation("androidx.navigation:navigation-compose:$navVersion")

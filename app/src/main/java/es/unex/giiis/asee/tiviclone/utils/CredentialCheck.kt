@@ -36,11 +36,9 @@ class CredentialCheck private constructor() {
         )
 
         fun login(username: String, password: String): CredentialCheck {
-            //mock
-            return checks[0]
-//            return if (username.isBlank() || username.length < MINCHARS) checks[1]
-//            else if (password.isBlank() || password.length < MINCHARS) checks[2]
-//            else checks[0]
+            return if (username.isBlank() || username.length < MINCHARS) checks[1]
+            else if (password.isBlank() || password.length < MINCHARS) checks[2]
+            else checks[0]
         }
 
         fun join(username: String, password: String, repassword: String): CredentialCheck {

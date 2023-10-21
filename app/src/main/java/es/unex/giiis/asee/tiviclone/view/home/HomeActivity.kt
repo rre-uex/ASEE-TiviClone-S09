@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
+import android.view.View
 import androidx.appcompat.widget.SearchView
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
@@ -16,9 +16,10 @@ import androidx.navigation.ui.setupWithNavController
 
 import es.unex.giiis.asee.tiviclone.R
 import es.unex.giiis.asee.tiviclone.databinding.ActivityHomeBinding
+import es.unex.giiis.asee.tiviclone.model.Show
 import es.unex.giiis.asee.tiviclone.model.User
 
-class HomeActivity : AppCompatActivity() {
+class HomeActivity : AppCompatActivity(), DiscoverFragment.OnShowClickListener, LibraryFragment.OnShowClickListener {
     private lateinit var binding: ActivityHomeBinding
     private lateinit var appBarConfiguration: AppBarConfiguration
     private val navController by lazy {
@@ -63,6 +64,19 @@ class HomeActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
         setupActionBarWithNavController(navController, appBarConfiguration)
 
+        // Hide toolbar and bottom navigation when in detail fragment
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            if ((destination.id == R.id.showDetailFragment) ||
+                (destination.id == R.id.settingsFragment)){
+             //   binding.toolbar.visibility = View.GONE
+                binding.toolbar.menu.clear()
+                binding.bottomNavigation.visibility = View.GONE
+            } else {
+                binding.toolbar.visibility = View.VISIBLE
+                binding.bottomNavigation.visibility = View.VISIBLE
+            }
+        }
+
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -88,7 +102,8 @@ class HomeActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         R.id.action_settings -> {
             // User chooses the "Settings" item. Show the app settings UI.
-            Toast.makeText(this, "Settings option", Toast.LENGTH_SHORT).show()
+            val action = DiscoverFragmentDirections.actionHomeToSettingsFragment()
+            navController.navigate(action)
             true
         }
 
@@ -97,6 +112,11 @@ class HomeActivity : AppCompatActivity() {
             // Invoke the superclass to handle it.
             super.onOptionsItemSelected(item)
         }
+    }
+
+    override fun onShowClick(show: Show) {
+        val action = DiscoverFragmentDirections.actionDiscoverFragmentToShowDetailFragment(show)
+        navController.navigate(action)
     }
 
 }

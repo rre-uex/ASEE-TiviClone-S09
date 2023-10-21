@@ -5,11 +5,20 @@
     android:id="@+id/bottom_bar_nav_graph"
     app:startDestination="@id/discoverFragment">
 
+    <action
+        android:id="@+id/action_discoverFragment_to_showDetailFragment"
+        app:destination="@id/showDetailFragment" />
+
+    <action
+        android:id="@+id/action_home_to_settingsFragment"
+        app:destination="@id/settingsFragment" />
+
     <fragment
         android:id="@+id/discoverFragment"
         android:name="es.unex.giiis.asee.tiviclone.view.home.DiscoverFragment"
         android:label="@string/discover_option"
-        tools:layout="@layout/fragment_discover" />
+        tools:layout="@layout/fragment_discover" >
+    </fragment>
     <fragment
         android:id="@+id/libraryFragment"
         android:name="es.unex.giiis.asee.tiviclone.view.home.LibraryFragment"
@@ -20,4 +29,17 @@
         android:name="es.unex.giiis.asee.tiviclone.view.home.UserFragment"
         android:label="@string/user_option"
         tools:layout="@layout/fragment_user" />
+    <fragment
+        android:id="@+id/showDetailFragment"
+        android:name="es.unex.giiis.asee.tiviclone.view.home.ShowDetailFragment"
+        android:label="Show detail"
+        tools:layout="@layout/fragment_show_detail" >
+        <argument
+            android:name="show"
+            app:argType="es.unex.giiis.asee.tiviclone.model.Show" />
+    </fragment>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="es.unex.giiis.asee.tiviclone.view.home.SettingsFragment"
+        android:label="Settings" />
 </navigation>

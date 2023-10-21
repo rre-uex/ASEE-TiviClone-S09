@@ -1,0 +1,12 @@
+<resources>
+    <!-- Reply Preference -->
+    <string-array name="criteria_entries">
+        <item>Title</item>
+        <item>Year</item>
+    </string-array>
+
+    <string-array name="criteria_values">
+        <item>title</item>
+        <item>year</item>
+    </string-array>
+</resources>
