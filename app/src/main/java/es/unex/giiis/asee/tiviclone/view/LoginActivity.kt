@@ -9,8 +9,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.preference.PreferenceManager
 
 import es.unex.giiis.asee.tiviclone.databinding.ActivityLoginBinding
-import es.unex.giiis.asee.tiviclone.model.User
-import es.unex.giiis.asee.tiviclone.utils.CredentialCheck
+import es.unex.giiis.asee.tiviclone.data.model.User
+import es.unex.giiis.asee.tiviclone.util.CredentialCheck
 import es.unex.giiis.asee.tiviclone.view.home.HomeActivity
 
 class LoginActivity : AppCompatActivity() {
@@ -90,7 +90,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun navigateToHomeActivity(user: User, msg: String) {
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
+       // Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
         HomeActivity.start(this, user)
     }
 

@@ -8,8 +8,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import es.unex.giiis.asee.tiviclone.databinding.FragmentDiscoverBinding
 import androidx.recyclerview.widget.LinearLayoutManager
-import es.unex.giiis.asee.tiviclone.model.Show
-import es.unex.giiis.asee.tiviclone.data.dummyShows
+import es.unex.giiis.asee.tiviclone.data.model.Show
+import es.unex.giiis.asee.tiviclone.data.dummy.dummyShows
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER

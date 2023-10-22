@@ -8,8 +8,8 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.appcompat.app.AppCompatActivity
 
 import es.unex.giiis.asee.tiviclone.databinding.ActivityJoinBinding
-import es.unex.giiis.asee.tiviclone.model.User
-import es.unex.giiis.asee.tiviclone.utils.CredentialCheck
+import es.unex.giiis.asee.tiviclone.data.model.User
+import es.unex.giiis.asee.tiviclone.util.CredentialCheck
 
 class JoinActivity : AppCompatActivity() {
 

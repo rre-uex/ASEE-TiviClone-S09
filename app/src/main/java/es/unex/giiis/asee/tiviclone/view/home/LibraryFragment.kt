@@ -7,9 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
-import es.unex.giiis.asee.tiviclone.data.dummyShows
+import es.unex.giiis.asee.tiviclone.data.dummy.dummyShows
 import es.unex.giiis.asee.tiviclone.databinding.FragmentLibraryBinding
-import es.unex.giiis.asee.tiviclone.model.Show
+import es.unex.giiis.asee.tiviclone.data.model.Show
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -70,7 +70,7 @@ class LibraryFragment : Fragment() {
 
     private fun setUpRecyclerView() {
         adapter = LibraryAdapter(shows = favShows, onClick = {
-            listener.onShowClick(it)
+          //  listener.onShowClick(it) //avoid navigation to show details by now
         },
             onLongClick = {
                 it.isFavorite = false

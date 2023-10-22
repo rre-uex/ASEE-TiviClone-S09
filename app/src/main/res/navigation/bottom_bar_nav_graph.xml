@@ -36,7 +36,7 @@
         tools:layout="@layout/fragment_show_detail" >
         <argument
             android:name="show"
-            app:argType="es.unex.giiis.asee.tiviclone.model.Show" />
+            app:argType="es.unex.giiis.asee.tiviclone.data.model.Show" />
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"

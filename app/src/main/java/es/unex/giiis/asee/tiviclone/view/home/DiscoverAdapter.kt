@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import es.unex.giiis.asee.tiviclone.databinding.DiscoverItemListBinding
-import es.unex.giiis.asee.tiviclone.model.Show
+import es.unex.giiis.asee.tiviclone.data.model.Show
 class DiscoverAdapter(
     private val shows: List<Show>,
     private val onClick: (show: Show) -> Unit,

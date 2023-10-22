@@ -16,8 +16,8 @@ import androidx.navigation.ui.setupWithNavController
 
 import es.unex.giiis.asee.tiviclone.R
 import es.unex.giiis.asee.tiviclone.databinding.ActivityHomeBinding
-import es.unex.giiis.asee.tiviclone.model.Show
-import es.unex.giiis.asee.tiviclone.model.User
+import es.unex.giiis.asee.tiviclone.data.model.Show
+import es.unex.giiis.asee.tiviclone.data.model.User
 
 class HomeActivity : AppCompatActivity(), DiscoverFragment.OnShowClickListener, LibraryFragment.OnShowClickListener {
     private lateinit var binding: ActivityHomeBinding

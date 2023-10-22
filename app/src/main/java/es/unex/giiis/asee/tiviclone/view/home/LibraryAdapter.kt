@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import es.unex.giiis.asee.tiviclone.databinding.LibraryItemListBinding
-import es.unex.giiis.asee.tiviclone.model.Show
+import es.unex.giiis.asee.tiviclone.data.model.Show
 class LibraryAdapter(
     private var shows: List<Show>,
     private val onClick: (show: Show) -> Unit,
