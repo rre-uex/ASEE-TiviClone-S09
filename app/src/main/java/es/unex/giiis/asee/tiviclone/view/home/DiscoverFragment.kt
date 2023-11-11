@@ -10,17 +10,14 @@ import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import es.unex.giiis.asee.tiviclone.databinding.FragmentDiscoverBinding
 import androidx.recyclerview.widget.LinearLayoutManager
-import es.unex.giiis.asee.tiviclone.api.APICallback
 import es.unex.giiis.asee.tiviclone.api.APIError
 import es.unex.giiis.asee.tiviclone.api.getNetworkService
 import es.unex.giiis.asee.tiviclone.data.api.TvShow
 import es.unex.giiis.asee.tiviclone.data.model.Show
-import es.unex.giiis.asee.tiviclone.data.dummy.dummyShows
+import es.unex.giiis.asee.tiviclone.data.model.User
 import es.unex.giiis.asee.tiviclone.data.toShow
-import es.unex.giiis.asee.tiviclone.util.BACKGROUND
-import kotlinx.coroutines.Dispatchers
+import es.unex.giiis.asee.tiviclone.database.TiviCloneDatabase
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -33,6 +30,9 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class DiscoverFragment : Fragment() {
+
+    private lateinit var user: User
+    private lateinit var db: TiviCloneDatabase
 
     private val TAG = "DiscoverFragment"
 
@@ -62,6 +62,7 @@ class DiscoverFragment : Fragment() {
 
     override fun onAttach(context: android.content.Context) {
         super.onAttach(context)
+        db = TiviCloneDatabase.getInstance(context)!!
         if (context is OnShowClickListener) {
             listener = context
         } else {
@@ -82,11 +83,14 @@ class DiscoverFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setUpRecyclerView()
 
+        val userProvider = activity as UserProvider
+        user = userProvider.getUser()
+
         lifecycleScope.launch {
             if (_shows.isEmpty()) {
                 binding.spinner.visibility = View.VISIBLE
                 try {
-                    _shows = fetchShows().filterNotNull().map(TvShow::toShow)
+                    _shows = fetchShows().map(TvShow::toShow)
                     adapter.updateData(_shows)
                 } catch (error: APIError) {
                     Toast.makeText(context, error.message, Toast.LENGTH_SHORT).show()
@@ -96,6 +100,7 @@ class DiscoverFragment : Fragment() {
                 }
             }
         }
+
     }
 
     private suspend fun fetchShows(): List<TvShow> {
@@ -115,7 +120,8 @@ class DiscoverFragment : Fragment() {
                 listener.onShowClick(it)
             },
             onLongClick = {
-                Toast.makeText(context, "long click on: "+it.title, Toast.LENGTH_SHORT).show()
+                setFavorite(it)
+                Toast.makeText(context, "Added to library: "+it.title, Toast.LENGTH_SHORT).show()
             },
             context = this.context
         )
@@ -123,7 +129,14 @@ class DiscoverFragment : Fragment() {
             rvShowList.layoutManager = LinearLayoutManager(context)
             rvShowList.adapter = adapter
         }
-        android.util.Log.d("DiscoverFragment", "setUpRecyclerView")
+        Log.d("DiscoverFragment", "setUpRecyclerView")
+    }
+
+    private fun setFavorite(show: Show){
+        lifecycleScope.launch {
+            show.isFavorite = true
+            db.showDao().insertAndRelate(show,user.userId!!)
+        }
     }
 
     override fun onDestroyView() {

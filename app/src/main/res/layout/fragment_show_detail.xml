@@ -33,16 +33,15 @@
         android:id="@+id/sw_fav"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
-        android:layout_marginTop="3dp"
         android:layout_marginEnd="6dp"
         android:foregroundTint="#9C27B0"
         android:text="FAV"
-        android:textColor="#F8E857"
+        android:textColor="@color/black"
         android:textStyle="bold"
-        android:trackTint="#F8E857"
+        android:trackTint="@color/black"
         android:typeface="monospace"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/banner_img" />
 
     <ImageView
         android:id="@+id/cover_img"

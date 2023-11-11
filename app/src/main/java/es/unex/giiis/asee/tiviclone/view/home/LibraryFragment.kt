@@ -6,10 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
-import es.unex.giiis.asee.tiviclone.data.dummy.dummyShows
 import es.unex.giiis.asee.tiviclone.databinding.FragmentLibraryBinding
 import es.unex.giiis.asee.tiviclone.data.model.Show
+import es.unex.giiis.asee.tiviclone.data.model.User
+import es.unex.giiis.asee.tiviclone.database.TiviCloneDatabase
+import kotlinx.coroutines.launch
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -23,6 +26,10 @@ private const val ARG_PARAM2 = "param2"
  */
 class LibraryFragment : Fragment() {
 
+    private lateinit var user: User
+
+    private lateinit var db: TiviCloneDatabase
+
     private lateinit var listener: OnShowClickListener
     interface OnShowClickListener {
         fun onShowClick(show: Show)
@@ -32,7 +39,7 @@ class LibraryFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var adapter: LibraryAdapter
 
-    private var favShows = dummyShows.filter { it.isFavorite }
+    private var favShows: List<Show> = emptyList()
 
     // TODO: Rename and change types of parameters
     private var param1: String? = null
@@ -48,7 +55,8 @@ class LibraryFragment : Fragment() {
 
     override fun onAttach(context: android.content.Context) {
         super.onAttach(context)
-        if (context is LibraryFragment.OnShowClickListener) {
+        db = TiviCloneDatabase.getInstance(context)!!
+        if (context is OnShowClickListener) {
             listener = context
         } else {
             throw RuntimeException(context.toString() + " must implement OnShowClickListener")
@@ -66,24 +74,45 @@ class LibraryFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpRecyclerView()
+
+        val userProvider = activity as UserProvider
+        user = userProvider.getUser()
+
+        loadFavorites()
     }
 
     private fun setUpRecyclerView() {
         adapter = LibraryAdapter(shows = favShows, onClick = {
-          //  listener.onShowClick(it) //avoid navigation to show details by now
+            listener.onShowClick(it)
         },
             onLongClick = {
-                it.isFavorite = false
-                favShows = favShows.filter { it.isFavorite }
-                adapter.swap(favShows)
+                setNoFavorite(it)
+                loadFavorites()
                 Toast.makeText(context, "${it.title} removed from library", Toast.LENGTH_SHORT).show()
-            }
+            },
+            context = context
         )
         with(binding) {
             rvLibShowList.layoutManager = GridLayoutManager(context, 3)
             rvLibShowList.adapter = adapter
         }
         android.util.Log.d("DiscoverFragment", "setUpRecyclerView")
+    }
+
+    private fun loadFavorites(){
+        lifecycleScope.launch {
+            binding.spinner.visibility = View.VISIBLE
+            favShows = db.showDao().getUserWithShows(user.userId!!).shows
+            adapter.updateData(favShows)
+            binding.spinner.visibility = View.GONE
+        }
+    }
+    private fun setNoFavorite(show: Show){
+        lifecycleScope.launch {
+            show.isFavorite = false
+            //delete show and userShow is deleted by cascade
+            db.showDao().delete(show)
+        }
     }
 
     override fun onDestroyView() {

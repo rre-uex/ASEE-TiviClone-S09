@@ -5,7 +5,7 @@ import es.unex.giiis.asee.tiviclone.data.api.TvShow
 import es.unex.giiis.asee.tiviclone.data.model.Show
 
 fun TvShow.toShow() = Show(
-    id = id ?: 0,
+    showId = id ?: 0,
     title = name ?: "",
     description = description ?: "",
     year = startDate?.substring(0, 4) ?: "",
@@ -20,7 +20,7 @@ fun TvShow.toShow() = Show(
 )
 
 fun Show.toTvShow() = TvShow(
-    id = id,
+    id = showId,
     name = title,
     description = description,
     startDate = year,

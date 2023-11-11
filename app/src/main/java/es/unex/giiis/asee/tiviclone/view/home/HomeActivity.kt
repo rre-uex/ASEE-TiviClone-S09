@@ -19,7 +19,9 @@ import es.unex.giiis.asee.tiviclone.databinding.ActivityHomeBinding
 import es.unex.giiis.asee.tiviclone.data.model.Show
 import es.unex.giiis.asee.tiviclone.data.model.User
 
-class HomeActivity : AppCompatActivity(), DiscoverFragment.OnShowClickListener, LibraryFragment.OnShowClickListener {
+class HomeActivity : AppCompatActivity(), DiscoverFragment.OnShowClickListener, LibraryFragment.OnShowClickListener, UserProvider {
+
+    private lateinit var user: User
     private lateinit var binding: ActivityHomeBinding
     private lateinit var appBarConfiguration: AppBarConfiguration
     private val navController by lazy {
@@ -46,7 +48,7 @@ class HomeActivity : AppCompatActivity(), DiscoverFragment.OnShowClickListener, 
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val user = intent.getSerializableExtra(USER_INFO) as User
+        user = intent.getSerializableExtra(USER_INFO) as User
 
         setUpUI(user)
         setUpListeners()
@@ -118,5 +120,7 @@ class HomeActivity : AppCompatActivity(), DiscoverFragment.OnShowClickListener, 
         val action = DiscoverFragmentDirections.actionDiscoverFragmentToShowDetailFragment(show)
         navController.navigate(action)
     }
+
+    override fun getUser() = user
 
 }
