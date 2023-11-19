@@ -14,8 +14,8 @@ import retrofit2.http.Query
 
 private val service: TVShowAPI by lazy {
     val okHttpClient = OkHttpClient.Builder()
-//        .addInterceptor(SkipNetworkInterceptor())
-        .addInterceptor(HttpLoggingInterceptor())
+        .addInterceptor(SkipNetworkInterceptor())
+//        .addInterceptor(HttpLoggingInterceptor())
         .build()
 
     val retrofit = Retrofit.Builder()
