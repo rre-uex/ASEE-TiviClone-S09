@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
+import es.unex.giiis.asee.tiviclone.TiviCloneApplication
 import es.unex.giiis.asee.tiviclone.api.getNetworkService
 import es.unex.giiis.asee.tiviclone.data.Repository
 import es.unex.giiis.asee.tiviclone.databinding.FragmentLibraryBinding
@@ -29,7 +30,6 @@ private const val ARG_PARAM2 = "param2"
 class LibraryFragment : Fragment() {
 
     private lateinit var user: User
-    private lateinit var db: TiviCloneDatabase
     private lateinit var repository: Repository
 
     private lateinit var listener: OnShowClickListener
@@ -57,8 +57,6 @@ class LibraryFragment : Fragment() {
 
     override fun onAttach(context: android.content.Context) {
         super.onAttach(context)
-        db = TiviCloneDatabase.getInstance(context)!!
-        repository = Repository.getInstance(db.userDao(),db.showDao(), getNetworkService())
         if (context is OnShowClickListener) {
             listener = context
         } else {
@@ -77,6 +75,9 @@ class LibraryFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpRecyclerView()
+
+        val appContainer = (this.activity?.application as TiviCloneApplication).appContainer
+        repository = appContainer.repository
 
         val userProvider = activity as UserProvider
         user = userProvider.getUser()

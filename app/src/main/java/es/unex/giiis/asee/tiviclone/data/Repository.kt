@@ -14,7 +14,7 @@ import es.unex.giiis.asee.tiviclone.data.model.UserWithShows
 import es.unex.giiis.asee.tiviclone.database.dao.ShowDao
 import es.unex.giiis.asee.tiviclone.database.dao.UserDao
 
-class Repository private constructor(
+class Repository(
     private val userDao: UserDao,
     private val showDao: ShowDao,
     private val networkService: TVShowAPI
@@ -85,18 +85,5 @@ class Repository private constructor(
 
     companion object {
         private const val MIN_TIME_FROM_LAST_FETCH_MILLIS: Long = 3000
-
-        @Volatile
-        private var INSTANCE: Repository? = null
-
-        fun getInstance(
-            userDao: UserDao,
-            showDao: ShowDao,
-            showAPI: TVShowAPI
-        ): Repository {
-            return INSTANCE ?: synchronized(this) {
-                INSTANCE ?: Repository(userDao, showDao, showAPI).also { INSTANCE = it }
-            }
-        }
     }
 }

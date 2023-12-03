@@ -11,6 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import es.unex.giiis.asee.tiviclone.R
+import es.unex.giiis.asee.tiviclone.TiviCloneApplication
 import es.unex.giiis.asee.tiviclone.api.APIError
 import es.unex.giiis.asee.tiviclone.api.getNetworkService
 import es.unex.giiis.asee.tiviclone.data.Repository
@@ -30,9 +31,8 @@ private const val TAG = "ShowDetailFragment"
  */
 class ShowDetailFragment : Fragment() {
 
-    private lateinit var repository: Repository
     private lateinit var user: User
-    private lateinit var db: TiviCloneDatabase
+    private lateinit var repository: Repository
 
     private var _binding: FragmentShowDetailBinding? = null
     private val binding get() = _binding!!
@@ -47,15 +47,12 @@ class ShowDetailFragment : Fragment() {
         return binding.root
     }
 
-    override fun onAttach(context: android.content.Context) {
-        super.onAttach(context)
-        db = TiviCloneDatabase.getInstance(context)!!
-        repository = Repository.getInstance(db.userDao(),db.showDao(),getNetworkService())
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val show = args.show
+
+        val appContainer = (this.activity?.application as TiviCloneApplication).appContainer
+        repository = appContainer.repository
 
         val userProvider = activity as UserProvider
         user = userProvider.getUser()
