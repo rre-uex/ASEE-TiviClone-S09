@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import androidx.activity.viewModels
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.get
 import androidx.navigation.fragment.NavHostFragment
@@ -20,9 +21,9 @@ import es.unex.giiis.asee.tiviclone.databinding.ActivityHomeBinding
 import es.unex.giiis.asee.tiviclone.data.model.Show
 import es.unex.giiis.asee.tiviclone.data.model.User
 
-class HomeActivity : AppCompatActivity(), DiscoverFragment.OnShowClickListener, LibraryFragment.OnShowClickListener, UserProvider {
+class HomeActivity : AppCompatActivity(){
 
-    private lateinit var user: User
+    private val viewModel: HomeViewModel by viewModels()
     private lateinit var binding: ActivityHomeBinding
     private lateinit var appBarConfiguration: AppBarConfiguration
     private val navController by lazy {
@@ -49,13 +50,19 @@ class HomeActivity : AppCompatActivity(), DiscoverFragment.OnShowClickListener, 
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        user = intent.getSerializableExtra(USER_INFO) as User
+        viewModel.userInSession = intent.getSerializableExtra(USER_INFO) as User
 
-        setUpUI(user)
+        viewModel.navigateToShow.observe(this) { show ->
+            show?.let {
+                onShowClick(show)
+            }
+        }
+
+        setUpUI()
         setUpListeners()
     }
 
-    fun setUpUI(user: User) {
+    fun setUpUI() {
         binding.bottomNavigation.setupWithNavController(navController)
             appBarConfiguration = AppBarConfiguration(
                 setOf(
@@ -119,11 +126,9 @@ class HomeActivity : AppCompatActivity(), DiscoverFragment.OnShowClickListener, 
         }
     }
 
-    override fun onShowClick(show: Show) {
+    fun onShowClick(show: Show) {
         val action = DiscoverFragmentDirections.actionDiscoverFragmentToShowDetailFragment(show)
         navController.navigate(action)
     }
-
-    override fun getUser() = user
 
 }

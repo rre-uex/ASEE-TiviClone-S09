@@ -1,26 +1,18 @@
 package es.unex.giiis.asee.tiviclone.view.home
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.lifecycle.lifecycleScope
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import es.unex.giiis.asee.tiviclone.R
-import es.unex.giiis.asee.tiviclone.TiviCloneApplication
-import es.unex.giiis.asee.tiviclone.api.APIError
-import es.unex.giiis.asee.tiviclone.api.getNetworkService
-import es.unex.giiis.asee.tiviclone.data.Repository
 import es.unex.giiis.asee.tiviclone.data.model.Show
-import es.unex.giiis.asee.tiviclone.data.model.User
-import es.unex.giiis.asee.tiviclone.data.toShow
-import es.unex.giiis.asee.tiviclone.database.TiviCloneDatabase
 import es.unex.giiis.asee.tiviclone.databinding.FragmentShowDetailBinding
-import kotlinx.coroutines.launch
 
 private const val TAG = "ShowDetailFragment"
 
@@ -31,8 +23,8 @@ private const val TAG = "ShowDetailFragment"
  */
 class ShowDetailFragment : Fragment() {
 
-    private lateinit var user: User
-    private lateinit var repository: Repository
+    private val viewModel: ShowDetailViewModel by viewModels { ShowDetailViewModel.Factory }
+    private val homeViewModel: HomeViewModel by activityViewModels()
 
     private var _binding: FragmentShowDetailBinding? = null
     private val binding get() = _binding!!
@@ -51,24 +43,26 @@ class ShowDetailFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val show = args.show
 
-        val appContainer = (this.activity?.application as TiviCloneApplication).appContainer
-        repository = appContainer.repository
+        homeViewModel.user.observe(viewLifecycleOwner) { user ->
+            viewModel.user = user
+        }
+        viewModel.show = show
 
-        val userProvider = activity as UserProvider
-        user = userProvider.getUser()
-
-        lifecycleScope.launch{
-            Log.d(TAG, "Fetching ${show.title} details")
-            try{
-               val _show = repository.fetchShowDetail(show.showId).toShow()
-               _show.isFavorite = show.isFavorite
-               showBinding(_show)
-            } catch (error: APIError) {
-                Toast.makeText(context, error.message, Toast.LENGTH_SHORT).show()
+        // Show a Toast whenever the [toast] is updated a non-null value
+        viewModel.toast.observe(viewLifecycleOwner) { text ->
+            text?.let {
+                Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
+                viewModel.onToastShown()
             }
-            Log.d(TAG, "Showing ${show.title} details")
         }
 
+        subscribeUi()
+    }
+
+    private fun subscribeUi() {
+        viewModel.showDetail.observe(viewLifecycleOwner) { show ->
+            show?.let{ showBinding(show) }
+        }
     }
 
     private fun showBinding(show: Show) {
@@ -89,16 +83,10 @@ class ShowDetailFragment : Fragment() {
             .into(binding.bannerImg)
 
         binding.swFav.setOnCheckedChangeListener { _, isChecked ->
-            lifecycleScope.launch {
-                if (isChecked) {
-                    show.isFavorite = true
-                    repository.showToLibrary(show,user.userId!!)
-                } else {
-                    show.isFavorite = false
-                    repository.deleteShowFromLibrary(show,user.userId!!)
-                }
-            }
-
+            if (isChecked)
+                viewModel.setFavorite(show)
+            else
+                viewModel.setNoFavorite(show)
         }
     }
 

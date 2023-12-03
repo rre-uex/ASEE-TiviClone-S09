@@ -7,19 +7,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import es.unex.giiis.asee.tiviclone.databinding.FragmentDiscoverBinding
 import androidx.recyclerview.widget.LinearLayoutManager
-import es.unex.giiis.asee.tiviclone.TiviCloneApplication
-import es.unex.giiis.asee.tiviclone.api.APIError
-import es.unex.giiis.asee.tiviclone.api.getNetworkService
-import es.unex.giiis.asee.tiviclone.data.Repository
-import es.unex.giiis.asee.tiviclone.data.model.Show
-import es.unex.giiis.asee.tiviclone.data.model.User
-import es.unex.giiis.asee.tiviclone.database.TiviCloneDatabase
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
 
 /**
  * A simple [Fragment] subclass.
@@ -28,29 +19,14 @@ import kotlinx.coroutines.launch
  */
 class DiscoverFragment : Fragment() {
 
-    private lateinit var user: User
     private val viewModel: DiscoverViewModel by viewModels { DiscoverViewModel.Factory }
+    private val homeViewModel: HomeViewModel by activityViewModels()
 
     private val TAG = "DiscoverFragment"
-
-    private lateinit var listener: OnShowClickListener
-    interface OnShowClickListener {
-        fun onShowClick(show: Show)
-    }
 
     private var _binding: FragmentDiscoverBinding? = null
     private val binding get() = _binding!!
     private lateinit var adapter: DiscoverAdapter
-
-    override fun onAttach(context: android.content.Context) {
-        super.onAttach(context)
-
-        if (context is OnShowClickListener) {
-            listener = context
-        } else {
-            throw RuntimeException(context.toString() + " must implement OnShowClickListener")
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -65,10 +41,9 @@ class DiscoverFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setUpRecyclerView()
 
-        val userProvider = activity as UserProvider
-        user = userProvider.getUser()
-
-        viewModel.user = user
+        homeViewModel.user.observe(viewLifecycleOwner) { user ->
+            viewModel.user = user
+        }
 
         // show the spinner when [spinner] is true
         viewModel.spinner.observe(viewLifecycleOwner) { show ->
@@ -97,7 +72,7 @@ class DiscoverFragment : Fragment() {
         adapter = DiscoverAdapter(
             shows = emptyList(),
             onClick = {
-                listener.onShowClick(it)
+                homeViewModel.onShowClick(it)
             },
             onLongClick = {
                 viewModel.setFavorite(it)

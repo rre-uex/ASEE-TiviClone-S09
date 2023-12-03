@@ -6,9 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
-import es.unex.giiis.asee.tiviclone.data.model.Show
 import es.unex.giiis.asee.tiviclone.databinding.FragmentLibraryBinding
 /**
  * A simple [Fragment] subclass.
@@ -17,14 +17,10 @@ class LibraryFragment : Fragment() {
 
     private lateinit var adapter: LibraryAdapter
     private val viewModel: LibraryViewModel by viewModels { LibraryViewModel.Factory }
+    private val homeViewModel: HomeViewModel by activityViewModels()
 
     private var _binding: FragmentLibraryBinding? = null
     private val binding get() = _binding!!
-    private lateinit var listener: OnShowClickListener
-    interface OnShowClickListener {
-        fun onShowClick(show: Show)
-    }
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,31 +30,20 @@ class LibraryFragment : Fragment() {
         return binding.root
     }
 
-    override fun onAttach(context: android.content.Context) {
-        super.onAttach(context)
-
-        if (context is LibraryFragment.OnShowClickListener) {
-            listener = context
-        } else {
-            throw RuntimeException(context.toString() + " must implement OnShowClickListener")
-        }
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpRecyclerView()
 
-        val userProvider = activity as UserProvider
-        val user = userProvider.getUser()
-
-        viewModel.user = user
+        homeViewModel.user.observe(viewLifecycleOwner) { user ->
+            viewModel.user = user
+        }
 
         subscribeUi(adapter)
     }
 
     private fun setUpRecyclerView() {
         adapter = LibraryAdapter(shows = emptyList(), onClick = {
-            listener.onShowClick(it)
+            homeViewModel.onShowClick(it)
         },
             onLongClick = {
                 viewModel.setNoFavorite(it)
